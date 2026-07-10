@@ -357,8 +357,10 @@ function doRespin(kind) {
   spinReels(kind === "country", kind === "year", rand(cands));
 }
 
+// bands track the tournament thresholds: elite = champion territory (89.5+),
+// good = clears the group stage (83.5+)
 function ratingClass(r) {
-  return r >= 88 ? "r-elite" : r >= 82 ? "r-good" : r >= 76 ? "r-mid" : "r-poor";
+  return r >= 89.5 ? "r-elite" : r >= 83.5 ? "r-good" : r >= 77.5 ? "r-mid" : "r-poor";
 }
 
 let playerSort = localStorage.getItem("ltc-sort") || "position";
@@ -449,11 +451,11 @@ function squadRating() {
 
 // pure rating threshold -> how far you go
 function outcomeFor(avg) {
-  if (avg >= 87.75) return { stage: 5, key: "CHAMPION" };
-  if (avg >= 87)    return { stage: 5, key: "FINAL" };      // lose the final
-  if (avg >= 86)    return { stage: 4, key: "SEMI" };
-  if (avg >= 84.5)  return { stage: 3, key: "QUARTER" };
-  if (avg >= 82)    return { stage: 2, key: "R16" };
+  if (avg >= 89.5)  return { stage: 5, key: "CHAMPION" };
+  if (avg >= 88.5)  return { stage: 5, key: "FINAL" };      // lose the final
+  if (avg >= 87.5)  return { stage: 4, key: "SEMI" };
+  if (avg >= 86)    return { stage: 3, key: "QUARTER" };
+  if (avg >= 83.5)  return { stage: 2, key: "R16" };
   return { stage: 1, key: "GROUP" };
 }
 
@@ -590,7 +592,7 @@ function showResult(key, avg) {
   list.innerHTML = "";
   state.slots.forEach(s => {
     const p = s.pick;
-    const rc = p.rating >= 88 ? "r-elite" : p.rating >= 82 ? "r-good" : p.rating >= 76 ? "r-mid" : "r-poor";
+    const rc = ratingClass(p.rating);
     const row = document.createElement("div");
     row.className = "sq-row";
     row.innerHTML = `<span class="sq-pos">${s.label}</span>
