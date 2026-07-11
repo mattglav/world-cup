@@ -239,6 +239,15 @@ function shortName(name) {
 function updateDraftUI() {
   const filled = filledCount();
   $("pick-count").textContent = `${filled} / ${state.slots.length}`;
+  const avgEl = $("avg-rating");
+  if (filled > 0) {
+    const avg = state.slots.reduce((a, s) => a + (s.pick ? s.pick.rating : 0), 0) / filled;
+    avgEl.textContent = avg.toFixed(1);
+    avgEl.className = ratingClass(avg);
+  } else {
+    avgEl.textContent = "";
+    avgEl.className = "";
+  }
   const btn = $("spin-btn");
   if (state.spin && !state.spinning) {
     // a spin is waiting while the user rearranges the pitch
